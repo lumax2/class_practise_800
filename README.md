@@ -71,6 +71,8 @@ Once the server is running, open a web browser and go to http://127.0.0.1:5000/ 
 ```
 The project includes a .gitignore file to ignore the following:
 
+
+
 # Python compiled files
 __pycache__/
 *.py[cod]
@@ -78,26 +80,38 @@ __pycache__/
 *.pyd
 *.so
 
+
+
 # Virtual environments
 venv/
 env/
 .venv/
 .env/
 
+
+
 # IDE configurations
 .vscode/
 .idea/
 
+
+
 # MacOS system files
 .DS_Store
+
+
 
 # PyCharm-related files
 *.iml
 *.ipr
 *.iws
 
+
+
 # Log files
 *.log
+
+
 
 # Flask session files
 instance/
