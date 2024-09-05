@@ -13,6 +13,15 @@ class Card:
     def __repr__(self):
         return f"{self.value} of {self.suit}"
 
+    # 将 Card 对象转换为字典
+    def to_dict(self):
+        return {"suit": self.suit, "value": self.value}
+
+    # 从字典恢复为 Card 对象
+    @staticmethod
+    def from_dict(card_dict):
+        return Card(card_dict['suit'], card_dict['value'])
+
 # 定义牌堆类
 class Deck:
     def __init__(self):
@@ -50,17 +59,22 @@ def index():
 def start():
     # 初始化牌堆、玩家和庄家的手牌
     deck = Deck()
-    session['player_hand'] = [deck.draw_card(), deck.draw_card()]
-    session['dealer_hand'] = [deck.draw_card(), deck.draw_card()]
-    session['deck'] = deck
+    player_hand = [deck.draw_card(), deck.draw_card()]
+    dealer_hand = [deck.draw_card(), deck.draw_card()]
+
+    # 将手牌对象转换为字典并存储到 session
+    session['player_hand'] = [card.to_dict() for card in player_hand]
+    session['dealer_hand'] = [card.to_dict() for card in dealer_hand]
+    session['deck'] = [card.to_dict() for card in deck.cards]
     session['game_over'] = False
 
     return redirect(url_for('game'))
 
 @app.route('/game')
 def game():
-    player_hand = session['player_hand']
-    dealer_hand = session['dealer_hand']
+    # 从 session 恢复卡牌对象
+    player_hand = [Card.from_dict(card) for card in session['player_hand']]
+    dealer_hand = [Card.from_dict(card) for card in session['dealer_hand']]
     player_value = calculate_hand_value(player_hand)
 
     if player_value > 21:
@@ -72,19 +86,27 @@ def game():
 @app.route('/hit')
 def hit():
     if not session.get('game_over'):
-        deck = session['deck']
-        session['player_hand'].append(deck.draw_card())
+        # 恢复牌堆并抽牌
+        deck = [Card.from_dict(card) for card in session['deck']]
+        new_card = deck.pop()
+        player_hand = [Card.from_dict(card) for card in session['player_hand']]
+        player_hand.append(new_card)
+
+        # 更新 session 中的手牌和牌堆
+        session['player_hand'] = [card.to_dict() for card in player_hand]
+        session['deck'] = [card.to_dict() for card in deck]
 
     return redirect(url_for('game'))
 
 @app.route('/stand')
 def stand():
-    dealer_hand = session['dealer_hand']
-    player_value = calculate_hand_value(session['player_hand'])
-    deck = session['deck']
+    # 恢复玩家和庄家的手牌
+    dealer_hand = [Card.from_dict(card) for card in session['dealer_hand']]
+    player_value = calculate_hand_value([Card.from_dict(card) for card in session['player_hand']])
+    deck = [Card.from_dict(card) for card in session['deck']]
 
     while calculate_hand_value(dealer_hand) < 17:
-        dealer_hand.append(deck.draw_card())
+        dealer_hand.append(deck.pop())
 
     dealer_value = calculate_hand_value(dealer_hand)
 
@@ -96,7 +118,7 @@ def stand():
         result = 'Dealer wins!'
 
     session['game_over'] = True
-    return render_template('game.html', player_hand=session['player_hand'], dealer_hand=dealer_hand,
+    return render_template('game.html', player_hand=session['player_hand'], dealer_hand=[card.to_dict() for card in dealer_hand],
                            player_value=player_value, dealer_value=dealer_value, result=result, game_over=True)
 
 if __name__ == '__main__':
