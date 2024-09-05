@@ -79,6 +79,7 @@ def game():
 
     if player_value > 21:
         session['game_over'] = True
+        return redirect(url_for('defeat'))  # 玩家爆牌，失败
 
     return render_template('game.html', player_hand=player_hand, dealer_hand=dealer_hand, player_value=player_value,
                            game_over=session['game_over'])
@@ -111,15 +112,24 @@ def stand():
     dealer_value = calculate_hand_value(dealer_hand)
 
     if dealer_value > 21 or player_value > dealer_value:
-        result = 'You win!'
+        session['game_over'] = True
+        return redirect(url_for('victory'))  # 玩家赢了
     elif dealer_value == player_value:
         result = "It's a tie!"
+        session['game_over'] = True
+        return render_template('game.html', player_hand=session['player_hand'], dealer_hand=[card.to_dict() for card in dealer_hand],
+                               player_value=player_value, dealer_value=dealer_value, result=result, game_over=True)
     else:
-        result = 'Dealer wins!'
+        session['game_over'] = True
+        return redirect(url_for('defeat'))  # 玩家输了
 
-    session['game_over'] = True
-    return render_template('game.html', player_hand=session['player_hand'], dealer_hand=[card.to_dict() for card in dealer_hand],
-                           player_value=player_value, dealer_value=dealer_value, result=result, game_over=True)
+@app.route('/victory')
+def victory():
+    return render_template('victory.html')
+
+@app.route('/defeat')
+def defeat():
+    return render_template('defeat.html')
 
 if __name__ == '__main__':
     app.run(debug=True)

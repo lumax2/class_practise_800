@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blackjack Defeat</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <h1>Sorry! You Lost!</h1>
+    <p>The dealer has won this round of Blackjack.</p>
+    <form action="/start">
+        <button type="submit">Try Again</button>
+    </form>
+</body>
+</html>
