@@ -1,0 +1,38 @@
+# Python忽略的文件
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+
+# 虚拟环境
+venv/
+env/
+.venv/
+.env/
+
+# 环境变量文件
+*.env
+.env.local
+.env.*.local
+
+# 编辑器配置
+.vscode/
+.idea/
+
+# MacOS系统文件
+.DS_Store
+
+# pycharm相关文件
+*.iml
+*.ipr
+*.iws
+
+# 日志文件
+*.log
+
+# 忽略 flask 的 session 文件（如果保存到文件系统）
+instance/
+
+# Jupyter Notebook Checkpoints
+.ipynb
