@@ -71,8 +71,6 @@ Once the server is running, open a web browser and go to http://127.0.0.1:5000/ 
 ```
 The project includes a .gitignore file to ignore the following:
 
-
-
 # Python compiled files
 __pycache__/
 *.py[cod]
@@ -80,49 +78,31 @@ __pycache__/
 *.pyd
 *.so
 
-
-
 # Virtual environments
 venv/
 env/
 .venv/
 .env/
 
-
-
 # IDE configurations
 .vscode/
 .idea/
 
-
-
 # MacOS system files
 .DS_Store
-
-
 
 # PyCharm-related files
 *.iml
 *.ipr
 *.iws
 
-
-
 # Log files
 *.log
 
-
-
 # Flask session files
 instance/
-
 ```
 
 ## License
 This project is licensed under the MIT License.
 
-### Explanation:
-- Every code block is formatted inside the correct code block tags.
-- You can copy and paste this entire `README.md` code directly into your `README.md` file in your project.
-
-Let me know if you need further adjustments!
